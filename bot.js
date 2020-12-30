@@ -4,7 +4,6 @@ const Game = require('hangman-game-engine')
 const randomWords = require('random-words');
 const roasts = require('./roasts.js')
 
-const word = "word";
 const MAX_GUESS = 5;
 
 const { exec } = require("child_process");
@@ -66,9 +65,20 @@ function gotMessage(msg){
     {
         // extract the sender id and create  a new game
         let id = msg.author.id;
-        hangmanGames[id] = new Game(word, {concealCharacter: '*', maxAttempt: 5});
+        let currentGame = hangmanGames[id]
+        if(currentGame != undefined)
+        {
+            msg.reply("`You already started a hangman game. First complete it`");
+            return;
+        }
+        const word_array = randomWords({exactly: 1, maxLength: 5}); 
+        const word = word_array.join('')
+        console.log({word});
+        hangmanGames[id] = new Game(word, {concealCharacter: '*', maxAttempt: MAX_GUESS});
         hangmanGames[id].status = 'IN_PROGRESS';
         msg.reply("`A new game has been created for you. Start guessing with &hang 'character'`");
+        let reply = `The word now is: ${hangmanGames[id].hiddenWord.join('')}`;
+        msg.reply("`" + reply + "`");
         return;
     }
 
@@ -124,6 +134,8 @@ function gotMessage(msg){
         else //failed guess
         {
             msg.reply("`The letter you guessed is incorrect`\n" + 'You have wrongly guessed ' + currentGame.failedGuesses + " times. (Maximum is " + MAX_GUESS + " times)");
+            let reply = `The word now is: ${hangmanGames[id].hiddenWord.join('')}`;
+            msg.reply("`" + reply + "`");
         }
 
         console.log(JSON.stringify(currentGame));
