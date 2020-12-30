@@ -2,57 +2,45 @@ require('dotenv').config();
 // import Game from 'hangman-game-engine';
 const Game = require('hangman-game-engine')
 
+const roasts = require('./roasts.js')
+
+const word = "word";
+const MAX_GUESS = 5;
+
 const { exec } = require("child_process");
 const Discord = require('discord.js');
 const client = new Discord.Client();
 let token = process.env.token;
 client.login(token);
 
-var id;
+let hangmanGames = [];
 
 client.on('ready', readyDiscord);
 
 function readyDiscord(msg){
+    console.log("Bot is Ready to Roll");
     client.user.setActivity("Press &help for help"); 
 }
+
+const commands = ["&help", "&roast", "&bored", "&hi", "&hang"];
 
 client.on('message', gotMessage);
 
 function gotMessage(msg){
 
-
-    const roasts = [
-        'You suck more than PHP',
-        "You're as useful as the 'ueue' in 'queue'",
-        "Mirrors can't talk. Lucky for u they can't laugh either",
-        "You're the reason the gene pool needs a lifegaurd",
-        "If I had a face like yours, I'd sue my parents",
-        "You're ass must be jealous of the shit that is coming out of your mouth",
-        "Some day you'll go far... and I hope you stay there",
-        'If your brain was dynamite, there wouldn’t be enough to blow your hat off.',
-        'Your face makes onions cry',
-        'Yo momma is so fat when she got on the scale it said, "I need your weight not your phone number."',
-        'Yo momma is so fat, I took a picture of her last Christmas and its still printing.',
-        'Yo mamma is so ugly when she tried to join an ugly contest they said, "Sorry, no professionals."',
-        'Yo momma so fat and old when God said, "Let there be light," he asked your mother to move out of the way.',
-        'Yo momma so fat, that when she fell, no one was laughing but the ground was cracking up.',
-        'Yo momma is so fat when she sat on WalMart, she lowered the prices.',
-        'Yo momma is so fat that Dora cant even explore her!',
-        'Your momma is so ugly she made One Direction go another direction.',
-        'Yo momma so stupid, she put two quarters in her ears and thought she was listening to 50 Cent.',
-        'If I had a dollar for every time you said somethng smart I would be broke',
-        "When you were born the doctor threw you out the windows and the window threw you back"
-    ]
+    if(msg.channel.id != "793403873951612931" && commands.includes(msg.content))
+    {
+        msg.channel.send("`Dot the bot is under maintenance.`");
+        return;
+    }
 
     console.log(msg.content);
     if(msg.content === '&help')
-    {
         msg.channel.send("```Commands u can use are &hi, &roast, &bored. Wanna know what they are? Fucking try for yourself.```")
-    }
+
     if(msg.content === '&hi')
-    {
-        msg.channel.send('hi');
-    }
+        msg.reply('hi');
+
     if(msg.content === '&roast')
     {
         const index = Math.floor(Math.random() * roasts.length);
@@ -73,10 +61,64 @@ function gotMessage(msg){
             msg.channel.send("```"+stdout+"```")
         });
     }
-    if(msg.content === '&hang')
+
+    if(msg.content === '&hang') // initialise and start a new hangman game for the current user
     {
-        id = msg.author.id;
-        console.log(id);
+        // extract the sender id and create  a new game
+        let id = msg.author.id;
+        hangmanGames[id] = new Game(word, {concealCharacter: '*', maxAttempt: 5});
+        hangmanGames[id].status = 'IN_PROGRESS';
+        msg.reply("`A new game has been created for you. Start guessing with &hang 'character'`");
+        return;
+    }
+
+    if(msg.content.startsWith("&hang")) // to guess a letter
+    {
+
+        // input form: &hang char
+        let id = msg.author.id
+        
+        let currentGame = hangmanGames[id]
+        if(currentGame == undefined)
+        {
+            msg.reply("`You have not yet started a hangman game. Start one by typing &hang`");
+            return;
+        }
+        hangmanGames[id].status = 'IN_PROGRESS';
+
+        let char = (msg.content.split(' '))[1];
+        
+        console.log({char});
+
+        let initialFailGuess = currentGame.failedGuesses;
+        currentGame.guess(char);
+
+        if(currentGame.failedGuesses === MAX_GUESS)
+        {
+            currentGame.revealHiddenWord();
+            let reply = `Better luck next time. The correct word was: ${currentGame.hiddenWord.join('')}`;
+            msg.reply("`" + reply + "`");
+        }
+
+        if(!currentGame.hiddenWord.includes('*'))
+        {
+            msg.reply("You guessed the word.");
+        }
+
+        if(currentGame.failedGuesses == initialFailGuess) //successful guess
+        {
+            let reply = `The letter you guessed is present in the word. The word now is: ${currentGame.hiddenWord.join('')}`;
+
+            console.log(reply);
+            msg.reply("'" + reply + "'");
+        }
+        else //failed guess
+        {
+            msg.reply("Incorrect guess");
+        }
+
+        console.log(JSON.stringify(currentGame));
+        hangmanGames[id] = currentGame;
     }
 }
 
