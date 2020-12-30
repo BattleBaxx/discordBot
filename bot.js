@@ -1,7 +1,7 @@
 require('dotenv').config();
 // import Game from 'hangman-game-engine';
 const Game = require('hangman-game-engine')
-
+const randomWords = require('random-words');
 const roasts = require('./roasts.js')
 
 const word = "word";
