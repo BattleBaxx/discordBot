@@ -16,7 +16,7 @@ let hangmanGames = [];
 
 client.on('ready', readyDiscord);
 
-function readyDiscord(msg){
+function readyDiscord(){
     console.log("Bot is Ready to Roll");
     client.user.setActivity("Press &help for help"); 
 }
@@ -27,7 +27,7 @@ client.on('message', gotMessage);
 
 function gotMessage(msg){
 
-    if(msg.channel.id != "793403873951612931" && commands.includes(msg.content))
+    if(msg.channel.id !== "793403873951612931" && commands.includes(msg.content))
     {
         msg.channel.send("`Dot the bot is under maintenance.`");
         return;
@@ -66,7 +66,7 @@ function gotMessage(msg){
         // extract the sender id and create  a new game
         let id = msg.author.id;
         let currentGame = hangmanGames[id]
-        if(currentGame != undefined)
+        if(currentGame !== undefined)
         {
             msg.reply("`You already started a hangman game. First complete it`");
             return;
@@ -89,7 +89,7 @@ function gotMessage(msg){
         let id = msg.author.id
         
         let currentGame = hangmanGames[id]
-        if(currentGame == undefined)
+        if(currentGame === undefined)
         {
             msg.reply("`You have not yet started a hangman game. Start one by typing &hang`");
             return;
@@ -124,7 +124,7 @@ function gotMessage(msg){
             return;
         }
 
-        if(currentGame.failedGuesses == initialFailGuess) //successful guess
+        if(currentGame.failedGuesses === initialFailGuess) //successful guess
         {
             let reply = `The letter you guessed is present in the word. The word now is: ${currentGame.hiddenWord.join('')}`;
 
