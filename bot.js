@@ -91,18 +91,27 @@ function gotMessage(msg){
         console.log({char});
 
         let initialFailGuess = currentGame.failedGuesses;
+        if(currentGame.failedLetters.includes(char))
+        {
+            msg.reply("`You have already guessed this letter, dude.`")
+            return;
+        }
         currentGame.guess(char);
 
         if(currentGame.failedGuesses === MAX_GUESS)
         {
             currentGame.revealHiddenWord();
-            let reply = `Better luck next time. The correct word was: ${currentGame.hiddenWord.join('')}`;
+            let reply = `Ofcourse you didnt win. Anyhow better luck next time NOT. The correct word was: ${currentGame.hiddenWord.join('')}`;
             msg.reply("`" + reply + "`");
+            delete hangmanGames[id];
+            return;
         }
 
         if(!currentGame.hiddenWord.includes('*'))
         {
-            msg.reply("You guessed the word.");
+            msg.reply("`Congrats you guessed the word, didn't think u would have done that.`");
+            delete hangmanGames[id];
+            return;
         }
 
         if(currentGame.failedGuesses == initialFailGuess) //successful guess
@@ -110,11 +119,11 @@ function gotMessage(msg){
             let reply = `The letter you guessed is present in the word. The word now is: ${currentGame.hiddenWord.join('')}`;
 
             console.log(reply);
-            msg.reply("'" + reply + "'");
+            msg.reply("`" + reply + "`");
         }
         else //failed guess
         {
-            msg.reply("Incorrect guess");
+            msg.reply("`The letter you guessed is incorrect`\n" + 'You have wrongly guessed ' + currentGame.failedGuesses + " times. (Maximum is " + MAX_GUESS + " times)");
         }
 
         console.log(JSON.stringify(currentGame));
