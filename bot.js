@@ -26,12 +26,6 @@ client.on('message', gotMessage);
 
 function gotMessage(msg){
 
-    if(msg.channel.id !== "793403873951612931" && commands.includes(msg.content))
-    {
-        msg.channel.send("`Dot the bot is under maintenance.`");
-        return;
-    }
-
     console.log(msg.content);
     if(msg.content === '&help')
         msg.channel.send("```Commands u can use are &hi, &roast, &bored. Wanna know what they are? Fucking try for yourself.```")
