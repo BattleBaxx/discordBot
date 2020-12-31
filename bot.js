@@ -38,7 +38,8 @@ async function gotMessage(msg){
 
     if(msg.content === "&cease")
     {
-        if(msg.author.id == owner_id)
+        const clientApplication = await client.fetchApplication();
+        if(msg.author.id === clientApplication.owner.id)
         {
             await msg.channel.send("`Ceasing to exist in 3... 2... 1..`")
             client.destroy();
@@ -51,7 +52,8 @@ async function gotMessage(msg){
     }
     else if(msg.content === "&retire" )
     {
-        if(msg.author.id == owner_id)
+        const clientApplication = await client.fetchApplication();
+        if(msg.author.id === clientApplication.owner.id)
         {
             msg.channel.send("Maintenance mode: `On`")
             maintenance = true;
@@ -64,7 +66,8 @@ async function gotMessage(msg){
     }
     else if(msg.content === "&arise" )
     {
-        if(msg.author.id == owner_id)
+        const clientApplication = await client.fetchApplication();
+        if(msg.author.id === clientApplication.owner.id)
         {
             msg.channel.send("Maintenance mode: `Off`")
             maintenance = false;
