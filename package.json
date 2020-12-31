@@ -19,7 +19,9 @@
   "dependencies": {
     "discord.js": "^12.5.1",
     "dotenv": "^8.2.0",
+    "fun-facts": "^1.0.5",
     "hangman-game-engine": "^1.1.3",
+    "node-fetch": "^2.6.1",
     "random-words": "^1.1.1"
   }
 }
