@@ -71,7 +71,7 @@ async function gotMessage(msg){
             await msg.channel.send("`Dot the bot is under maintenance.`");
     }
     else if(msg.content === '&help')
-        await msg.channel.send("```Commands u can use are &hi, &roast, &bored, &hang, &fact, &anime, &katto and &doggo. Try to know what they are....```")
+        await msg.channel.send("```Commands u can use are &hi, &bored, &hang, &fact, &anime, &katto and &doggo. Try to know what they are....```")
 
     else if(msg.content === '&hi')
         msg.reply('hi');
