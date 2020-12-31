@@ -6,14 +6,13 @@ const facts = require('fun-facts');
 const fetch = require('node-fetch');
 
 const MAX_GUESS = 8;
-var maintenance = false;
-var owner_id;
+let maintenance = false;
 
 const { exec } = require("child_process");
 const Discord = require('discord.js');
 const client = new Discord.Client();
 let token = process.env.token;
-client.login(token);
+client.login(token).then(() => {console.log("Client Logged in!")});
 
 
 let hangmanGames = [];
@@ -22,10 +21,7 @@ client.on('ready', readyDiscord);
 
 async function readyDiscord(){
     console.log("Bot is Ready to Roll");
-    client.user.setActivity("Press &help for help"); 
-    var promise = await client.fetchApplication();
-    owner_id = promise.owner.id;
-    // console.log( promise.owner.id);
+    await client.user.setActivity("Press &help for help");
 }
 
 const commands = ["&help", "&roast", "&bored", "&hi", "&hang", "&fact", "&gals", "&anime"];
@@ -45,46 +41,34 @@ async function gotMessage(msg){
             client.destroy();
         }
         else
-        {
-            msg.channel.send("`You dont have perms bruh.`")
-        }
-        return;
+            await msg.channel.send("`You dont have perms bruh.`")
     }
     else if(msg.content === "&retire" )
     {
         const clientApplication = await client.fetchApplication();
         if(msg.author.id === clientApplication.owner.id)
         {
-            msg.channel.send("Maintenance mode: `On`")
+            await msg.channel.send("Maintenance mode: `On`")
             maintenance = true;
         }
         else
-        {
-            msg.channel.send("`You dont have perms bruh.`")
-        }
-        return;
+            await msg.channel.send("`You dont have perms bruh.`")
     }
     else if(msg.content === "&arise" )
     {
         const clientApplication = await client.fetchApplication();
         if(msg.author.id === clientApplication.owner.id)
         {
-            msg.channel.send("Maintenance mode: `Off`")
+            await msg.channel.send("Maintenance mode: `Off`")
             maintenance = false;
         }
         else
-        {
-            msg.channel.send("`You dont have perms bruh.`")
-        }
-        return;
+            await msg.channel.send("`You dont have perms bruh.`")
     }
     else if(maintenance)
     {
         if(msg.channel.id !== "793403873951612931" && commands.includes(msg.content))
-        {
-            msg.channel.send("`Dot the bot is under maintenance.`");
-            return;
-        }
+            await msg.channel.send("`Dot the bot is under maintenance.`");
     }
     else if(msg.content === '&help')
         await msg.channel.send("```Commands u can use are &hi, &roast, &bored, &hang, &fact, &anime, &katto and &doggo. Try to know what they are....```")
@@ -95,7 +79,7 @@ async function gotMessage(msg){
     else if(msg.content === '&roast')
     {
         const index = Math.floor(Math.random() * roasts.length);
-        msg.channel.send("```"+roasts[index]+"```");
+        await msg.channel.send("```"+roasts[index]+"```");
     }
     else if(msg.content === '&bored')
     {
@@ -112,9 +96,9 @@ async function gotMessage(msg){
 
     else if(msg.content === "&fact")
     {
-        getFact = facts.get();
+        const getFact = facts.get();
         console.log(getFact);
-        msg.channel.send("`"+getFact.fact+"`")
+        await msg.channel.send("`"+getFact.fact+"`")
     }
 
     else if(msg.content === "&anime")
@@ -124,7 +108,7 @@ async function gotMessage(msg){
         let json = await response.json();
         console.log(json);
         let index = Math.floor(Math.random() * json.results.length)
-        msg.channel.send(json.results[index].url);
+        await msg.channel.send(json.results[index].url);
     }
 
     else if(msg.content === "&catto")
@@ -134,7 +118,7 @@ async function gotMessage(msg){
         let json = await response.json();
         console.log(json);
         let index = Math.floor(Math.random() * json.results.length)
-        msg.channel.send(json.results[index].url);
+        await msg.channel.send(json.results[index].url);
     }
 
     else if(msg.content === "&doggo")
@@ -144,7 +128,7 @@ async function gotMessage(msg){
         let json = await response.json();
         console.log(json);
         let index = Math.floor(Math.random() * json.results.length)
-        msg.channel.send(json.results[index].url);
+        await msg.channel.send(json.results[index].url);
     }
 
     else if(msg.content === '&hang') // initialise and start a new hangman game for the current user
@@ -165,12 +149,10 @@ async function gotMessage(msg){
         msg.reply("`A new game has been created for you. Start guessing with &hang 'character'`");
         let reply = `The word now is: ${hangmanGames[id].hiddenWord.join('')}`;
         msg.reply("`" + reply + "`");
-        return;
     }
 
     else if(msg.content.startsWith("&hang")) // to guess a letter
     {
-
         // input form: &hang char
         let id = msg.author.id
         
