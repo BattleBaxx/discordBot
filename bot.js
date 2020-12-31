@@ -1,10 +1,9 @@
 require('dotenv').config();
-// import Game from 'hangman-game-engine';
 const Game = require('hangman-game-engine')
 const randomWords = require('random-words');
 const roasts = require('./roasts.js')
 
-const MAX_GUESS = 5;
+const MAX_GUESS = 8;
 
 const { exec } = require("child_process");
 const Discord = require('discord.js');
@@ -71,7 +70,7 @@ function gotMessage(msg){
             msg.reply("`You already started a hangman game. First complete it`");
             return;
         }
-        const word_array = randomWords({exactly: 1, maxLength: 5}); 
+        const word_array = randomWords({exactly: 1, maxLength: 6}); 
         const word = word_array.join('')
         console.log({word});
         hangmanGames[id] = new Game(word, {concealCharacter: '*', maxAttempt: MAX_GUESS});
