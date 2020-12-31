@@ -34,8 +34,9 @@ client.on('message', gotMessage);
 
 async function gotMessage(msg){
 
-    
-    if(msg.content == "&cease")
+    console.log(msg.content);
+
+    if(msg.content === "&cease")
     {
         if(msg.author.id == owner_id)
         {
@@ -48,8 +49,7 @@ async function gotMessage(msg){
         }
         return;
     }
-
-    if(msg.content == "&retire" )
+    else if(msg.content === "&retire" )
     {
         if(msg.author.id == owner_id)
         {
@@ -62,8 +62,7 @@ async function gotMessage(msg){
         }
         return;
     }
-
-    if(msg.content == "&arise" )
+    else if(msg.content === "&arise" )
     {
         if(msg.author.id == owner_id)
         {
@@ -76,8 +75,7 @@ async function gotMessage(msg){
         }
         return;
     }
-
-    if(maintenance)
+    else if(maintenance)
     {
         if(msg.channel.id !== "793403873951612931" && commands.includes(msg.content))
         {
@@ -85,53 +83,38 @@ async function gotMessage(msg){
             return;
         }
     }
+    else if(msg.content === '&help')
+        await msg.channel.send("```Commands u can use are &hi, &roast, &bored, &hang, &fact, &anime, &katto and &doggo. Try to know what they are....```")
 
-    console.log(msg.content);
-    if(msg.content === '&help')
-        msg.channel.send("```Commands u can use are &hi, &roast, &bored, &hang, &fact, &anime, &katto and &doggo. Try to know what they are....```")
-
-    if(msg.content === '&hi')
+    else if(msg.content === '&hi')
         msg.reply('hi');
 
-    if(msg.content === '&roast')
+    else if(msg.content === '&roast')
     {
         const index = Math.floor(Math.random() * roasts.length);
         msg.channel.send("```"+roasts[index]+"```");
     }
-    if(msg.content === '&bored')
+    else if(msg.content === '&bored')
     {
-        exec("fortune|cowsay", (error, stdout, stderr) => {
-            if (error) {
+        exec("fortune | cowsay", (error, stdout, stderr) => {
+            if (error)
                 console.log(`error: ${error.message}`);
-                
-            }
-            if (stderr) {
+            else if (stderr)
                 console.log(`stderr: ${stderr}`);
-                
-            }
+
             console.log(`stdout: ${stdout}`);
             msg.channel.send("```"+stdout+"```")
         });
     }
 
-    if(msg.content === "&fact")
+    else if(msg.content === "&fact")
     {
         getFact = facts.get();
         console.log(getFact);
         msg.channel.send("`"+getFact.fact+"`")
     }
 
-    if(msg.content == "&gals")
-    {
-        let url = `https://api.tenor.com/v1/search?q=hot+chick&${process.env.tenorKey}=LIVDSRZULELA`
-        let response = await fetch(url);
-        let json = await response.json();
-        console.log(json);
-        let index = Math.floor(Math.random() * json.results.length)
-        msg.channel.send(json.results[index].url);
-    }
-
-    if(msg.content == "&anime")
+    else if(msg.content === "&anime")
     {
         let url = `https://api.tenor.com/v1/search?q=anime+cute&${process.env.tenorKey}=LIVDSRZULELA`
         let response = await fetch(url);
@@ -141,7 +124,7 @@ async function gotMessage(msg){
         msg.channel.send(json.results[index].url);
     }
 
-    if(msg.content == "&katto")
+    else if(msg.content === "&catto")
     {
         let url = `https://api.tenor.com/v1/search?q=kitten+cute&${process.env.tenorKey}=LIVDSRZULELA`
         let response = await fetch(url);
@@ -151,8 +134,7 @@ async function gotMessage(msg){
         msg.channel.send(json.results[index].url);
     }
 
-
-    if(msg.content == "&doggo")
+    else if(msg.content === "&doggo")
     {
         let url = `https://api.tenor.com/v1/search?q=puppy+cute&${process.env.tenorKey}=LIVDSRZULELA`
         let response = await fetch(url);
@@ -162,7 +144,7 @@ async function gotMessage(msg){
         msg.channel.send(json.results[index].url);
     }
 
-    if(msg.content === '&hang') // initialise and start a new hangman game for the current user
+    else if(msg.content === '&hang') // initialise and start a new hangman game for the current user
     {
         // extract the sender id and create  a new game
         let id = msg.author.id;
@@ -183,7 +165,7 @@ async function gotMessage(msg){
         return;
     }
 
-    if(msg.content.startsWith("&hang")) // to guess a letter
+    else if(msg.content.startsWith("&hang")) // to guess a letter
     {
 
         // input form: &hang char
