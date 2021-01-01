@@ -12,7 +12,7 @@ const { exec } = require("child_process");
 const Discord = require('discord.js');
 const client = new Discord.Client();
 let token = process.env.token;
-client.login(token).then(() => {console.log("Client Logged in!")});
+client.login(token).then(() => {console.log("Bot is Ready to Roll")});
 
 
 let hangmanGames = [];
@@ -20,11 +20,11 @@ let hangmanGames = [];
 client.on('ready', readyDiscord);
 
 async function readyDiscord(){
-    console.log("Bot is Ready to Roll");
+    
     await client.user.setActivity("Press &help for help");
 }
 
-const commands = ["&help", "&roast", "&bored", "&hi", "&hang", "&fact", "&gals", "&anime"];
+const commands = ["&help", "&roast", "&bored", "&hi", "&hang", "&fact", "&gals", "&anime", "&catto", "&doggo"];
 
 client.on('message', gotMessage);
 
@@ -71,7 +71,7 @@ async function gotMessage(msg){
             await msg.channel.send("`Dot the bot is under maintenance.`");
     }
     else if(msg.content === '&help')
-        await msg.channel.send("```Commands u can use are &hi, &bored, &hang, &fact, &anime, &katto and &doggo. Try to know what they are....```")
+        await msg.channel.send("```Commands u can use are &hi, &bored, &hang, &fact, &anime, &catto and &doggo. Try to know what they are....```")
 
     else if(msg.content === '&hi')
         msg.reply('hi');
