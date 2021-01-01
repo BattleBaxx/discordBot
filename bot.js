@@ -103,7 +103,7 @@ async function gotMessage(msg){
 
     else if(msg.content === "&anime")
     {
-        let url = `https://api.tenor.com/v1/search?q=anime+cute&${process.env.tenorKey}=LIVDSRZULELA`
+        let url = `https://api.tenor.com/v1/search?q=anime+cute&${process.env.tenorKey}=LIVDSRZULELAcontentfilter=high`
         let response = await fetch(url);
         let json = await response.json();
         console.log(json);
@@ -113,7 +113,7 @@ async function gotMessage(msg){
 
     else if(msg.content === "&catto")
     {
-        let url = `https://api.tenor.com/v1/search?q=kitten+cute&${process.env.tenorKey}=LIVDSRZULELA`
+        let url = `https://api.tenor.com/v1/search?q=kitten+cute&${process.env.tenorKey}=LIVDSRZULELA&contentfilter=high`
         let response = await fetch(url);
         let json = await response.json();
         console.log(json);
@@ -123,7 +123,7 @@ async function gotMessage(msg){
 
     else if(msg.content === "&doggo")
     {
-        let url = `https://api.tenor.com/v1/search?q=puppy+cute&${process.env.tenorKey}=LIVDSRZULELA`
+        let url = `https://api.tenor.com/v1/search?q=puppy+cute&${process.env.tenorKey}=LIVDSRZULELAcontentfilter=high`
         let response = await fetch(url);
         let json = await response.json();
         console.log(json);
