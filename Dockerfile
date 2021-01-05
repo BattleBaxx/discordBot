@@ -4,7 +4,7 @@ WORKDIR /discordBot
 
 COPY package*.json ./
 
-RUN npm install --quiet
+RUN npm install
 
 COPY . .
 
