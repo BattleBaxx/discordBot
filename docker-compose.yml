@@ -1,0 +1,16 @@
+
+version: '3.8'
+
+services:
+    dot-bot:
+        container_name: DotBot
+        build: .
+        env_file:
+            - .env
+        volumes:
+            - ./.env:/discordBot/.env
+        networks:
+            - dot-net
+
+networks:
+    dot-net:
