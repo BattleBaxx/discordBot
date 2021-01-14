@@ -169,7 +169,7 @@ async function gotMessage(msg){
         console.log({char});
 
         let initialFailGuess = currentGame.failedGuesses;
-        if(currentGame.failedLetters.includes(char))
+        if(currentGame.word.includes(char))
         {
             msg.reply("`You have already guessed this letter, dude.`")
             return;
